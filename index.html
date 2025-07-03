@@ -3,17 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>전공별 접수 현황</title>
+    <title>전공별 접수 현황 및 응답 확인</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #f4f4f4; }
-        .status-container { background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: inline-block; }
-        h1 { color: #333; }
+        .container { background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: inline-block; margin-bottom: 20px; }
+        .status-container { margin-bottom: 30px; }
+        h1, h2 { color: #333; }
         p { font-size: 1.2em; color: #555; margin: 10px 0; }
         .major-count { font-weight: bold; color: #007bff; }
+        .search-container { padding-top: 20px; border-top: 1px solid #eee; }
+        .search-container input[type="tel"], .search-container input[type="email"] {
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+            font-size: 1em;
+        }
+        .search-container button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .search-container button:hover {
+            background-color: #218838;
+        }
+        #responseDisplay {
+            margin-top: 20px;
+            text-align: left;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        #responseDisplay p {
+            margin: 5px 0;
+            font-size: 1em;
+            color: #333;
+        }
+        #responseDisplay strong {
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
-    <div class="status-container">
+    <div class="container status-container">
         <h1>실시간 전공별 접수 현황</h1>
         <p>국악: <span id="gugakCount" class="major-count">로딩 중...</span></p>
         <p>무용: <span id="muyongCount" class="major-count">로딩 중...</span></p>
@@ -21,23 +59,30 @@
         <p style="font-size: 0.8em; color: #888;">(최종 업데이트: <span id="lastUpdated"></span>)</p>
     </div>
 
+    <div class="container search-container">
+        <h2>내 응답 확인하기</h2>
+        <input type="tel" id="phoneNumberInput" placeholder="전화번호 입력 (- 없이 숫자만)" pattern="[0-9]{10,11}" title="숫자만 입력하세요 (10~11자리)">
+        <button id="searchButton">내 응답 검색</button>
+        <div id="responseDisplay">
+            <p>전화번호를 입력하고 '내 응답 검색' 버튼을 눌러주세요.</p>
+        </div>
+    </div>
+
     <script>
-        // Apps Script 웹 앱 URL (사용자 제공 URL)
+        // Apps Script 웹 앱 URL (이전과 동일)
         const APPS_SCRIPT_BASE_URL = 'https://script.google.com/macros/s/AKfycbwOavbH1ewTVByEkwz4JgXZg2DNLIIAOx5UFapsA5ckp9Wy_5BB0u8Vm41gmWLl5Sty/exec';
 
+        // 1. 실시간 접수 현황 가져오기 (기존 코드)
         async function fetchCounts() {
             try {
-                // 국악 시트 데이터 가져오기
                 const gugakResponse = await fetch(`${APPS_SCRIPT_BASE_URL}?sheet=국악`);
                 const gugakData = await gugakResponse.json();
-                document.getElementById('gugakCount').textContent = `${gugakData.count}명`; // Apps Script에서 반환하는 'count' 속성 사용
+                document.getElementById('gugakCount').textContent = `${gugakData.count}명`;
 
-                // 무용 시트 데이터 가져오기
                 const muyongResponse = await fetch(`${APPS_SCRIPT_BASE_URL}?sheet=무용`);
                 const muyongData = await muyongResponse.json();
                 document.getElementById('muyongCount').textContent = `${muyongData.count}명`;
 
-                // 음악연극 시트 데이터 가져오기
                 const musicTheaterResponse = await fetch(`${APPS_SCRIPT_BASE_URL}?sheet=음악연극`);
                 const musicTheaterData = await musicTheaterResponse.json();
                 document.getElementById('musicTheaterCount').textContent = `${musicTheaterData.count}명`;
@@ -45,7 +90,7 @@
                 document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
 
             } catch (error) {
-                console.error('데이터를 가져오는 데 실패했습니다:', error);
+                console.error('접수 현황 데이터를 가져오는 데 실패했습니다:', error);
                 document.getElementById('gugakCount').textContent = '오류';
                 document.getElementById('muyongCount').textContent = '오류';
                 document.getElementById('musicTheaterCount').textContent = '오류';
@@ -53,10 +98,53 @@
             }
         }
 
-        // 초기 로드 시 데이터 가져오기
+        // 2. 응답 검색 기능 추가
+        async function searchResponse() {
+            const phoneNumber = document.getElementById('phoneNumberInput').value;
+            const responseDisplay = document.getElementById('responseDisplay');
+            responseDisplay.innerHTML = '<p>검색 중...</p>'; // 검색 중 메시지
+
+            if (!phoneNumber) {
+                responseDisplay.innerHTML = '<p style="color: red;">전화번호를 입력해주세요.</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(APPS_SCRIPT_BASE_URL, {
+                    method: 'POST', // doPost 함수를 호출하기 위해 POST 메소드 사용
+                    headers: {
+                        'Content-Type': 'application/json', // JSON 데이터를 보낸다고 알림
+                    },
+                    body: JSON.stringify({ phone: phoneNumber.replace(/[^0-9]/g, '') }), // 숫자만 추출하여 전송
+                });
+
+                const data = await response.json();
+
+                if (data.found) {
+                    let html = '<h3>귀하의 접수 내용:</h3>';
+                    for (const key in data.data) {
+                        // Apps Script에서 보낸 헤더 이름을 바탕으로 정보 표시
+                        // 필요에 따라 'key'를 사용자 친화적인 이름으로 변경 가능
+                        html += `<p><strong>${key}:</strong> ${data.data[key]}</p>`;
+                    }
+                    responseDisplay.innerHTML = html;
+                } else {
+                    responseDisplay.innerHTML = `<p style="color: red;">${data.message}</p>`;
+                }
+
+            } catch (error) {
+                console.error('응답 검색 중 오류 발생:', error);
+                responseDisplay.innerHTML = '<p style="color: red;">응답을 검색하는 데 실패했습니다. 잠시 후 다시 시도해주세요.</p>';
+            }
+        }
+
+        // 이벤트 리스너: 검색 버튼 클릭 시 searchResponse 함수 호출
+        document.getElementById('searchButton').addEventListener('click', searchResponse);
+
+        // 초기 로드 시 접수 현황 데이터 가져오기 (기존)
         fetchCounts();
 
-        // 1분(60000밀리초)마다 데이터 업데이트
+        // 1분(60000밀리초)마다 접수 현황 데이터 업데이트 (기존)
         setInterval(fetchCounts, 60000);
     </script>
 </body>

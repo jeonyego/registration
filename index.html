@@ -22,31 +22,25 @@
     </div>
 
     <script>
-        // 여기에 1단계에서 복사한 Google Sheet JSON URL을 붙여넣으세요.
-        // 각 시트별로 게시했다면 각 시트의 URL을 넣어주세요.
-        const GUGAK_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSDRvFSehfjJmJg1_LA3w85x8g8Dvf79rRLE62g2lb8g1rxsljZUPlpgFOdc48AK2VnKeMNJBMsK487/pub?gid=409055649&single=true&output=json'; // 예: https://docs.google.com/spreadsheets/d/e/2PACX-1vR.../pub?gid=0&single=true&output=json
-        const MUYONG_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSDRvFSehfjJmJg1_LA3w85x8g8Dvf79rRLE62g2lb8g1rxsljZUPlpgFOdc48AK2VnKeMNJBMsK487/pub?gid=1836740337&single=true&output=json';
-        const MUSICTHEATER_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSDRvFSehfjJmJg1_LA3w85x8g8Dvf79rRLE62g2lb8g1rxsljZUPlpgFOdc48AK2VnKeMNJBMsK487/pub?gid=100596266&single=true&output=json';
+        // Apps Script 웹 앱 URL (사용자 제공 URL)
+        const APPS_SCRIPT_BASE_URL = 'https://script.google.com/macros/s/AKfycbwOavbH1ewTVByEkwz4JgXZg2DNLIIAOx5UFapsA5ckp9Wy_5BB0u8Vm41gmWLl5Sty/exec';
 
         async function fetchCounts() {
             try {
                 // 국악 시트 데이터 가져오기
-                const gugakResponse = await fetch(GUGAK_SHEET_URL);
+                const gugakResponse = await fetch(`${APPS_SCRIPT_BASE_URL}?sheet=국악`);
                 const gugakData = await gugakResponse.json();
-                const gugakCount = gugakData.feed.entry ? gugakData.feed.entry.length : 0; // JSON 구조에 따라 다를 수 있음
-                document.getElementById('gugakCount').textContent = `${gugakCount}명`;
+                document.getElementById('gugakCount').textContent = `${gugakData.count}명`; // Apps Script에서 반환하는 'count' 속성 사용
 
                 // 무용 시트 데이터 가져오기
-                const muyongResponse = await fetch(MUYONG_SHEET_URL);
+                const muyongResponse = await fetch(`${APPS_SCRIPT_BASE_URL}?sheet=무용`);
                 const muyongData = await muyongResponse.json();
-                const muyongCount = muyongData.feed.entry ? muyongData.feed.entry.length : 0;
-                document.getElementById('muyongCount').textContent = `${muyongCount}명`;
+                document.getElementById('muyongCount').textContent = `${muyongData.count}명`;
 
                 // 음악연극 시트 데이터 가져오기
-                const musicTheaterResponse = await fetch(MUSICTHEATER_SHEET_URL);
+                const musicTheaterResponse = await fetch(`${APPS_SCRIPT_BASE_URL}?sheet=음악연극`);
                 const musicTheaterData = await musicTheaterResponse.json();
-                const musicTheaterCount = musicTheaterData.feed.entry ? musicTheaterData.feed.entry.length : 0;
-                document.getElementById('musicTheaterCount').textContent = `${musicTheaterCount}명`;
+                document.getElementById('musicTheaterCount').textContent = `${musicTheaterData.count}명`;
 
                 document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
 

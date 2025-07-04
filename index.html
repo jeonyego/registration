@@ -144,6 +144,7 @@
   </div>
 
 <script> 
+// JavaScript <script> 태그 안에 checkSubmission 함수 내부
 async function checkSubmission() {
   const name = document.getElementById("name").value.trim();
   const phone = document.getElementById("phone").value.trim();
@@ -168,7 +169,6 @@ async function checkSubmission() {
   checkButton.disabled = true;
 
   try {
-    // 💡 변경: Apps Script 웹 앱 URL을 방금 배포하신 URL로 업데이트합니다.
     const appsScriptUrl = `https://script.google.com/macros/s/AKfycbzN9Uh01HzhmstcnzVcwLI7STnP4Ya17V4kes4K_n3jWfAH6oW2F8doGr_07yaDe7yd/exec`;
     const response = await fetch(`${appsScriptUrl}?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`);
     const data = await response.json();
@@ -179,35 +179,59 @@ async function checkSubmission() {
       resultDiv.className = "result error";
       resultDiv.innerText = data.error;
     } else {
-      // 💡 변경: 결과 표시 내용을 새로운 데이터 구조에 맞춰 업데이트합니다.
       resultDiv.className = "result";
       let rankMessage = '';
+      let statusMessage = ''; // 💡 추가: 상태 메시지를 위한 변수
+
       if (data.rank) {
         rankMessage = `\n\n📢 ${data.major} 신청자 중 ${data.rank}번째입니다.`;
+
+        // 💡 추가: 순번에 따른 상태 메시지 로직
+        const rank = data.rank;
+        const major = data.major;
+
+        if (major === '국악') {
+          if (rank >= 1 && rank <= 150) {
+            statusMessage = "현장 참석자입니다. 향사 아트홀 입장이 가능합니다.";
+          } else if (rank >= 151 && rank <= 250) {
+            statusMessage = "현장 대기자입니다. 교실에서 실시간 송출 영상을 보실 수 있습니다.";
+          } else {
+            statusMessage = "예비 대상자입니다. 취소자가 발생할 시 현장 참석이 가능합니다. 학교 홈페이지 공지사항을 참고해주세요.";
+          }
+        } else if (major === '무용' || major === '음악연극') {
+          if (rank >= 1 && rank <= 40) {
+            statusMessage = "현장 참석자입니다. 향사 아트홀 입장이 가능합니다.";
+          } else if (rank >= 41 && rank <= 60) {
+            statusMessage = "현장 대기자입니다. 교실에서 실시간 송출 영상을 보실 수 있습니다.";
+          } else {
+            statusMessage = "예비 대상자입니다. 취소자가 발생할 시 현장 참석이 가능합니다. 학교 홈페이지 공지사항을 참고해주세요.";
+          }
+        }
       }
 
-      // 참석 인원 정보에 대한 조건부 표시 로직 추가
       let attendeesInfo = '';
       if (data.attendees !== undefined && data.attendees !== null && data.attendees !== '') {
-          // 참석 인원 정보가 있을 경우에만 표시
           attendeesInfo = `참석 인원: ${data.attendees}\n`;
       }
       
       let otherInfoLine = '';
-      // '그 외 참가자 정보' 항목이 있을 경우에만 표시 (기존 동반 여부 대체)
       if (data.otherInfo !== undefined && data.otherInfo !== null && data.otherInfo !== '') {
           otherInfoLine = `그 외 참가자 정보: ${data.otherInfo}\n`;
       }
-
 
       resultDiv.innerText =
         `✅ 신청 내역 확인\n\n` +
         `이름: ${data.name}\n` +
         `전공 선택: ${data.major}\n` +
-        attendeesInfo + // 조건부 참석 인원 정보
-        otherInfoLine + // 조건부 그 외 참가자 정보
+        attendeesInfo +
+        otherInfoLine +
         `신청 시간: ${data.timestamp}` +
         rankMessage;
+      
+      // 💡 추가: 순번 메시지 뒤에 상태 메시지 추가
+      if (statusMessage) {
+        resultDiv.innerText += `\n\n${statusMessage}`;
+      }
     }
   } catch (err) {
     console.error("Fetch error:", err);

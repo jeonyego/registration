@@ -143,62 +143,79 @@
     <div id="result" class="result"></div>
   </div>
 
-  <script>
-    async function checkSubmission() {
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const resultDiv = document.getElementById("result");
-      const checkButton = document.querySelector('button');
+<script> 
+async function checkSubmission() {
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const resultDiv = document.getElementById("result");
+  const checkButton = document.querySelector('button');
 
-      resultDiv.style.display = "none";
+  resultDiv.style.display = "none";
+  resultDiv.className = "result";
+  resultDiv.innerText = "";
+  checkButton.disabled = false;
+
+  if (!name || !phone) {
+    resultDiv.style.display = "block";
+    resultDiv.className = "result error";
+    resultDiv.innerText = "이름과 연락처를 모두 입력해주세요.";
+    return;
+  }
+
+  resultDiv.style.display = "block";
+  resultDiv.className = "result loading";
+  resultDiv.innerText = "결과를 불러오는 중입니다. 잠시 기다려 주세요...";
+  checkButton.disabled = true;
+
+  try {
+    // 💡 변경: Apps Script 웹 앱 URL을 방금 배포하신 URL로 업데이트합니다.
+    const appsScriptUrl = `https://script.google.com/macros/s/AKfycbzN9Uh01HzhmstcnzVcwLI7STnP4Ya17V4kes4K_n3jWfAH6oW2F8doGr_07yaDe7yd/exec`;
+    const response = await fetch(`${appsScriptUrl}?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`);
+    const data = await response.json();
+
+    checkButton.disabled = false;
+
+    if (data.error) {
+      resultDiv.className = "result error";
+      resultDiv.innerText = data.error;
+    } else {
+      // 💡 변경: 결과 표시 내용을 새로운 데이터 구조에 맞춰 업데이트합니다.
       resultDiv.className = "result";
-      resultDiv.innerText = "";
-      checkButton.disabled = false;
-
-      if (!name || !phone) {
-        resultDiv.style.display = "block";
-        resultDiv.className = "result error";
-        resultDiv.innerText = "이름과 연락처를 모두 입력해주세요.";
-        return;
+      let rankMessage = '';
+      if (data.rank) {
+        rankMessage = `\n\n📢 ${data.major} 신청자 중 ${data.rank}번째입니다.`;
       }
 
-      resultDiv.style.display = "block";
-      resultDiv.className = "result loading";
-      resultDiv.innerText = "결과를 불러오는 중입니다. 잠시 기다려 주세요...";
-      checkButton.disabled = true;
-
-      try {
-        const appsScriptUrl = `https://script.google.com/macros/s/AKfycby-b3fiDuDlKgXbpqNG8g7aDnl3z5_aehA-QbmV2ot54CKZ9YcOYlQduO_BLokGJ0o/exec`;
-        const response = await fetch(`${appsScriptUrl}?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`);
-        const data = await response.json();
-
-        checkButton.disabled = false;
-
-        if (data.error) {
-          resultDiv.className = "result error";
-          resultDiv.innerText = data.error;
-        } else {
-          resultDiv.className = "result";
-          let rankMessage = '';
-          if (data.rank) {
-            rankMessage = `\n\n📢 ${data.major} 신청자 중 ${data.rank}번째입니다.`;
-          }
-
-          resultDiv.innerText =
-            `✅ 신청 내역 확인\n\n` +
-            `이름: ${data.name}\n` +
-            `전공 선택: ${data.major}\n` +
-            `동반 여부: ${data.companion}\n` +
-            `신청 시간: ${data.timestamp}` +
-            rankMessage;
-        }
-      } catch (err) {
-        console.error("Fetch error:", err);
-        checkButton.disabled = false;
-        resultDiv.className = "result error";
-        resultDiv.innerText = "요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+      // 참석 인원 정보에 대한 조건부 표시 로직 추가
+      let attendeesInfo = '';
+      if (data.attendees !== undefined && data.attendees !== null && data.attendees !== '') {
+          // 참석 인원 정보가 있을 경우에만 표시
+          attendeesInfo = `참석 인원: ${data.attendees}\n`;
       }
+      
+      let otherInfoLine = '';
+      // '그 외 참가자 정보' 항목이 있을 경우에만 표시 (기존 동반 여부 대체)
+      if (data.otherInfo !== undefined && data.otherInfo !== null && data.otherInfo !== '') {
+          otherInfoLine = `그 외 참가자 정보: ${data.otherInfo}\n`;
+      }
+
+
+      resultDiv.innerText =
+        `✅ 신청 내역 확인\n\n` +
+        `이름: ${data.name}\n` +
+        `전공 선택: ${data.major}\n` +
+        attendeesInfo + // 조건부 참석 인원 정보
+        otherInfoLine + // 조건부 그 외 참가자 정보
+        `신청 시간: ${data.timestamp}` +
+        rankMessage;
     }
+  } catch (err) {
+    console.error("Fetch error:", err);
+    checkButton.disabled = false;
+    resultDiv.className = "result error";
+    resultDiv.innerText = "요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+  }
+}
   </script>
 </body>
 </html>

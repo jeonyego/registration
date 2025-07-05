@@ -8,116 +8,142 @@
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      background-color: #f4f6f8;
+      background-color: #f4f6f8; [cite: 2]
       margin: 0;
       padding: 0;
     }
 
     .container {
-      max-width: 400px;
-      margin: 60px auto;
+      max-width: 400px; [cite: 2]
+      margin: 60px auto; [cite: 3]
       background: #fff;
       border: 1px solid #ddd;
       border-radius: 12px;
-      padding: 30px 24px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+      padding: 30px 24px; [cite: 3]
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04); [cite: 4]
     }
 
     h2 {
-      text-align: center;
-      color: #2c3e50;
+      text-align: center; [cite: 4]
+      color: #2c3e50; [cite: 5]
       margin-bottom: 24px;
       font-weight: 700;
     }
 
     .input-group {
-      margin-bottom: 20px;
+      margin-bottom: 20px; [cite: 6]
     }
 
     label {
       display: block;
       margin-bottom: 6px;
       font-weight: 500;
-      color: #333;
+      color: #333; [cite: 7]
     }
 
     input {
-      width: 92%;
-      padding: 10px 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-      transition: border-color 0.2s;
+      width: 80%; /* 입력칸 너비를 80%로 줄입니다. 원하시는 비율로 조정해보세요. */
+      max-width: 320px; /* `.container`의 max-width보다 약간 작게 설정 (선택 사항) */
+      padding: 10px 12px; [cite: 7]
+      border: 1px solid #ccc; [cite: 7]
+      border-radius: 6px; [cite: 8]
+      font-size: 1rem; [cite: 8]
+      transition: border-color 0.2s; [cite: 8]
+      margin-left: auto; /* 왼쪽 마진을 자동으로 설정하여 가운데 정렬 */
+      margin-right: auto; /* 오른쪽 마진을 자동으로 설정하여 가운데 정렬 */
+      display: block; /* margin: auto가 적용되려면 block 요소여야 합니다. */
     }
 
     input:focus {
-      border-color: #2c7be5;
-      outline: none;
+      border-color: #2c7be5; [cite: 9]
+      outline: none; [cite: 9]
+    }
+
+    /* input 요소의 플레이스홀더 텍스트 스타일 */
+    input::placeholder {
+      font-size: 0.9em; /* 폰트 크기를 기존보다 작게 (예: 90%) */
+    }
+
+    input::-webkit-input-placeholder {
+      font-size: 0.9em;
+    }
+
+    input::-moz-placeholder {
+      font-size: 0.9em;
+      opacity: 1;
+    }
+
+    input:-ms-input-placeholder {
+      font-size: 0.9em;
+    }
+
+    input::-ms-input-placeholder {
+      font-size: 0.9em;
     }
 
     .example {
-      display: block;
-      margin-top: 6px;
-      font-size: 0.85rem;
-      color: #777;
+      display: block; [cite: 10]
+      margin-top: 6px; [cite: 10]
+      font-size: 0.85rem; [cite: 10]
+      color: #777; [cite: 10]
     }
 
     button {
-      width: 100%;
-      padding: 12px;
-      font-size: 1rem;
-      font-weight: 600;
-      background-color: #2c7be5;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.2s;
+      width: 100%; [cite: 11]
+      padding: 12px; [cite: 11]
+      font-size: 1rem; [cite: 11]
+      font-weight: 600; [cite: 11]
+      background-color: #2c7be5; [cite: 11]
+      color: white; [cite: 11]
+      border: none; [cite: 11]
+      border-radius: 6px; [cite: 11]
+      cursor: pointer; [cite: 11]
+      transition: background-color 0.2s; [cite: 11]
     }
 
     button:hover {
-      background-color: #1a5cd8;
+      background-color: #1a5cd8; [cite: 13]
     }
 
     .result {
-      margin-top: 24px;
-      padding: 16px;
-      background-color: #e8f0fe;
-      border-left: 4px solid #4285f4;
-      border-radius: 6px;
-      white-space: pre-line;
-      color: #333;
-      display: none;
-      position: relative;
+      margin-top: 24px; [cite: 14]
+      padding: 16px; [cite: 14]
+      background-color: #e8f0fe; [cite: 14]
+      border-left: 4px solid #4285f4; [cite: 14]
+      border-radius: 6px; [cite: 14]
+      white-space: pre-line; [cite: 14]
+      color: #333; [cite: 14]
+      display: none; [cite: 14]
+      position: relative; [cite: 14]
     }
 
     .error {
-      background-color: #fce8e6;
-      border-left-color: #ea4335;
+      background-color: #fce8e6; [cite: 15]
+      border-left-color: #ea4335; [cite: 16]
     }
 
     .loading::before {
-      content: '';
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      margin-right: 8px;
-      border: 3px solid #4285f4;
-      border-top: 3px solid transparent;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      vertical-align: middle;
+      content: ''; [cite: 16]
+      display: inline-block; [cite: 16]
+      width: 16px; [cite: 17]
+      height: 16px; [cite: 17]
+      margin-right: 8px; [cite: 17]
+      border: 3px solid #4285f4; [cite: 17]
+      border-top: 3px solid transparent; [cite: 17]
+      border-radius: 50%; [cite: 17]
+      animation: spin 0.8s linear infinite; [cite: 17]
+      vertical-align: middle; [cite: 17]
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% { transform: rotate(0deg); [cite: 19] }
+      100% { transform: rotate(360deg); [cite: 20] }
     }
 
     @media (max-width: 480px) {
       .container {
-        margin: 40px 16px;
-        padding: 24px 16px;
+        margin: 40px 16px; [cite: 21]
+        padding: 24px 16px; [cite: 21]
       }
     }
   </style>
@@ -136,7 +162,7 @@
       <label for="phone">연락처 (휴대전화)</label>
       <input type="text" id="phone" placeholder="예: 01012345678 또는 010-1234-5678" />
       <span class="example">하이픈(-) 없이 또는 포함하여 입력 가능합니다.</span>
-    </div>
+    </div> [cite: 22]
 
     <button onclick="checkSubmission()">신청 확인</button>
 
@@ -146,100 +172,98 @@
 <script> 
 // JavaScript <script> 태그 안에 checkSubmission 함수 내부
 async function checkSubmission() {
-  const name = document.getElementById("name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const resultDiv = document.getElementById("result");
-  const checkButton = document.querySelector('button');
+  const name = document.getElementById("name").value.trim(); [cite: 23]
+  const phone = document.getElementById("phone").value.trim(); [cite: 23]
+  const resultDiv = document.getElementById("result"); [cite: 23]
+  const checkButton = document.querySelector('button'); [cite: 23]
 
-  resultDiv.style.display = "none";
-  resultDiv.className = "result";
-  resultDiv.innerText = "";
-  checkButton.disabled = false;
+  resultDiv.style.display = "none"; [cite: 24]
+  resultDiv.className = "result"; [cite: 24]
+  resultDiv.innerText = ""; [cite: 24]
+  checkButton.disabled = false; [cite: 24]
 
   if (!name || !phone) {
-    resultDiv.style.display = "block";
-    resultDiv.className = "result error";
-    resultDiv.innerText = "이름과 연락처를 모두 입력해주세요.";
+    resultDiv.style.display = "block"; [cite: 25]
+    resultDiv.className = "result error"; [cite: 25]
+    resultDiv.innerText = "이름과 연락처를 모두 입력해주세요."; [cite: 25]
     return;
   }
 
-  resultDiv.style.display = "block";
-  resultDiv.className = "result loading";
-  resultDiv.innerText = "결과를 불러오는 중입니다. 잠시 기다려 주세요...";
-  checkButton.disabled = true;
+  resultDiv.style.display = "block"; [cite: 26]
+  resultDiv.className = "result loading"; [cite: 26]
+  resultDiv.innerText = "결과를 불러오는 중입니다. 잠시 기다려 주세요..."; [cite: 26]
+  checkButton.disabled = true; [cite: 26]
 
   try {
-    const appsScriptUrl = `https://script.google.com/macros/s/AKfycbxr6c_goMpbMqNOZDzR4nslXjDf3GzbC5k33Y61KTnI_dm7gjnU6aXbg5UXo6Ds05CU/exec`;
-    const response = await fetch(`${appsScriptUrl}?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`);
-    const data = await response.json();
+    const appsScriptUrl = `https://script.google.com/macros/s/AKfycbxr6c_goMpbMqNOZDzR4nslXjDf3GzbC5k33Y61KTnI_dm7gjnU6aXbg5UXo6Ds05CU/exec`; [cite: 27]
+    const response = await fetch(`${appsScriptUrl}?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`); [cite: 27]
+    const data = await response.json(); [cite: 27]
 
-    checkButton.disabled = false;
+    checkButton.disabled = false; [cite: 28]
 
     if (data.error) {
-      resultDiv.className = "result error";
-      resultDiv.innerText = data.error;
+      resultDiv.className = "result error"; [cite: 28]
+      resultDiv.innerText = data.error; [cite: 29]
     } else {
-      resultDiv.className = "result";
-      let rankMessage = '';
-      let statusMessage = ''; // 💡 추가: 상태 메시지를 위한 변수
+      resultDiv.className = "result"; [cite: 29]
+      let rankMessage = ''; [cite: 29]
+      let statusMessage = ''; [cite: 30]
 
       if (data.rank) {
-        rankMessage = `\n\n📢 ${data.major} 신청자 중 ${data.rank}번째입니다.`;
+        rankMessage = `\n\n📢 ${data.major} 신청자 중 ${data.rank}번째입니다.`; [cite: 31]
 
-        // 💡 추가: 순번에 따른 상태 메시지 로직
-        const rank = data.rank;
-        const major = data.major;
+        const rank = data.rank; [cite: 32]
+        const major = data.major; [cite: 32]
 
         if (major === '국악') {
           if (rank >= 1 && rank <= 150) {
-            statusMessage = "현장 참석자입니다. 향사 아트홀 입장이 가능합니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.";
+            statusMessage = `<strong>현장 참석자</strong>입니다. 향사 아트홀 입장이 가능합니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.`; [cite: 33]
           } else if (rank >= 151 && rank <= 250) {
-            statusMessage = "현장 대기자입니다. 교실에서 실시간 송출 영상을 보실 수 있습니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.";
+            statusMessage = `<strong>현장 대기자</strong>입니다. 교실에서 실시간 송출 영상을 보실 수 있습니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.`; [cite: 34]
           } else {
-            statusMessage = "예비 대상자입니다. 취소자가 발생할 시 현장 참석이 가능합니다. 취소자가 발생할 때마다 순번에 따라 개별 연락을 드립니다.";
+            statusMessage = `<strong>예비 대상자</strong>입니다. 취소자가 발생할 시 현장 참석이 가능합니다. 취소자가 발생할 때마다 순번에 따라 개별 연락을 드립니다.`; [cite: 35]
           }
         } else if (major === '무용' || major === '음악연극') {
           if (rank >= 1 && rank <= 40) {
-            statusMessage = "현장 참석자입니다. 향사 아트홀 입장이 가능합니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.";
+            statusMessage = `<strong>현장 참석자</strong>입니다. 향사 아트홀 입장이 가능합니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.`; [cite: 36]
           } else if (rank >= 41 && rank <= 60) {
-            statusMessage = "현장 대기자입니다. 교실에서 실시간 송출 영상을 보실 수 있습니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.";
+            statusMessage = `<strong>현장 대기자</strong>입니다. 교실에서 실시간 송출 영상을 보실 수 있습니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.`; [cite: 37]
           } else {
-            statusMessage = "예비 대상자입니다. 취소자가 발생할 시 현장 참석이 가능합니다. 취소자가 발생할 때마다 순번에 따라 개별 연락을 드립니다.";
+            statusMessage = `<strong>예비 대상자</strong>입니다. 취소자가 발생할 시 현장 참석이 가능합니다. 취소자가 발생하면 순번에 따라 개별 연락을 드립니다.`; [cite: 38]
           }
         }
       }
 
-      let attendeesInfo = '';
-      if (data.attendees !== undefined && data.attendees !== null && data.attendees !== '') {
-          attendeesInfo = `참석 인원: ${data.attendees}\n`;
+      let attendeesInfo = ''; [cite: 39]
+      if (data.attendees !== undefined && data.attendees !== null && data.attendees !== '') { [cite: 39]
+          attendeesInfo = `참석 인원: ${data.attendees}<br>`; // \n -> <br> [cite: 40]
       }
       
-      let otherInfoLine = '';
-      if (data.otherInfo !== undefined && data.otherInfo !== null && data.otherInfo !== '') {
-          otherInfoLine = `그 외 참가자 정보: ${data.otherInfo}\n`;
+      let otherInfoLine = ''; [cite: 41]
+      if (data.otherInfo !== undefined && data.otherInfo !== null && data.otherInfo !== '') { [cite: 41]
+          otherInfoLine = `그 외 참가자 정보: ${data.otherInfo}<br>`; // \n -> <br> [cite: 42]
       }
 
-      resultDiv.innerText =
-        `✅ 신청 내역 확인\n\n` +
-        `이름: ${data.name}\n` +
-        `전공 선택: ${data.major}\n` +
-        attendeesInfo +
-        otherInfoLine +
-        `신청 시간: ${data.timestamp}` +
-        rankMessage;
+      resultDiv.innerHTML = // innerText -> innerHTML로 변경 
+        `✅ 신청 내역 확인<br><br>` + // \n\n -> <br><br>
+        `이름: ${data.name}<br>` + // \n -> <br>
+        `전공 선택: ${data.major}<br>` + // \n -> <br>
+        attendeesInfo + // 이미 <br> 포함
+        otherInfoLine + // 이미 <br> 포함
+        `신청 시간: ${data.timestamp}` + // \n -> <br>
+        rankMessage.replace(/\n/g, '<br>'); // 혹시 남은 \n 처리 
       
-      // 💡 추가: 순번 메시지 뒤에 상태 메시지 추가
-      if (statusMessage) {
-        resultDiv.innerText += `\n\n${statusMessage}`;
+      if (statusMessage) { [cite: 43]
+        resultDiv.innerHTML += `<br><br>${statusMessage}`; // innerText -> innerHTML로 변경 및 줄바꿈 추가 [cite: 44]
       }
     }
   } catch (err) {
-    console.error("Fetch error:", err);
-    checkButton.disabled = false;
-    resultDiv.className = "result error";
-    resultDiv.innerText = "요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+    console.error("Fetch error:", err); [cite: 45]
+    checkButton.disabled = false; [cite: 45]
+    resultDiv.className = "result error"; [cite: 45]
+    resultDiv.innerText = "요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."; [cite: 45]
   }
 }
-  </script>
+</script>
 </body>
 </html>

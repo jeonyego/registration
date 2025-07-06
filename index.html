@@ -148,6 +148,33 @@
 .quick-menu a:hover {
   background-color: #1a5cd8;
 }
+@media (max-width: 600px) {
+  .quick-menu {
+    top: auto !important;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    transform: none !important;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-radius: 0;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .quick-menu a {
+    margin: 0;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* 입력창 영역이 퀵메뉴에 가려지지 않도록 아래 여백 확보 */
+  .container {
+    padding-bottom: 60px;
+  }
+}    
   </style>
 </head>
 <body>

@@ -1,245 +1,295 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>입학설명회 신청 확인</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      background-color: #f4f6f8;
-      margin: 0;
-      padding: 0;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>입학설명회 신청 확인</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 60px auto;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 30px 24px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+      position: relative; /* 퀵메뉴 위치 지정을 위해 추가 */
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 24px;
+      font-weight: 700;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    input {
+      width: 92%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: #2c7be5;
+      outline: none;
+    }
+
+    .example {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      background-color: #2c7be5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #1a5cd8;
+    }
+
+    .result {
+      margin-top: 24px;
+      padding: 16px;
+      background-color: #e8f0fe;
+      border-left: 4px solid #4285f4;
+      border-radius: 6px;
+      white-space: pre-line;
+      color: #333;
+      display: none;
+      position: relative;
+    }
+
+    .error {
+      background-color: #fce8e6;
+      border-left-color: #ea4335;
+    }
+
+    .loading::before {
+      content: '';
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+      border: 3px solid #4285f4;
+      border-top: 3px solid transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        margin: 40px 16px;
+        padding: 24px 16px;
+      }
+    }
+
+    /* 퀵 메뉴 스타일 추가 */
+    .quick-menu {
+        position: fixed; /* 스크롤에 따라 움직이도록 fixed */
+        top: 50%; /* 초기 위치를 화면 중앙으로 설정 */
+        right: 20px; /* 오른쪽에서 20px 떨어지게 설정 */
+        transform: translateY(-50%); /* 세로 중앙 정렬 */
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 10px 0;
+        z-index: 1000; /* 다른 요소 위에 표시 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
-    .container {
-      max-width: 400px;
-      margin: 60px auto;
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      padding: 30px 24px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    .quick-menu a {
+        display: block;
+        padding: 8px 15px;
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background-color 0.2s;
+        width: 100%;
+        text-align: center;
     }
 
-    h2 {
-      text-align: center;
-      color: #2c3e50;
-      margin-bottom: 24px;
-      font-weight: 700;
+    .quick-menu a:hover {
+        background-color: #f0f0f0;
     }
-
-    .input-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 500;
-      color: #333;
-    }
-
-    input {
-      width: 92%;
-      padding: 10px 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-      transition: border-color 0.2s;
-    }
-
-    input:focus {
-      border-color: #2c7be5;
-      outline: none;
-    }
-
-    .example {
-      display: block;
-      margin-top: 6px;
-      font-size: 0.85rem;
-      color: #777;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 1rem;
-      font-weight: 600;
-      background-color: #2c7be5;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    button:hover {
-      background-color: #1a5cd8;
-    }
-
-    .result {
-      margin-top: 24px;
-      padding: 16px;
-      background-color: #e8f0fe;
-      border-left: 4px solid #4285f4;
-      border-radius: 6px;
-      white-space: pre-line;
-      color: #333;
-      display: none;
-      position: relative;
-    }
-
-    .error {
-      background-color: #fce8e6;
-      border-left-color: #ea4335;
-    }
-
-    .loading::before {
-      content: '';
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      margin-right: 8px;
-      border: 3px solid #4285f4;
-      border-top: 3px solid transparent;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      vertical-align: middle;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @media (max-width: 480px) {
-      .container {
-        margin: 40px 16px;
-        padding: 24px 16px;
-      }
-    }
-  </style>
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h2>입학설명회 신청 확인</h2>
+  <div class="container">
+    <h2>입학설명회 신청 확인</h2>
 
-    <div class="input-group">
-      <label for="name">이름 (참여자 이름)</label>
-      <input type="text" id="name" placeholder="예: 홍길동" />
-      <span class="example">설문지에 입력한 정확한 이름을 입력해주세요.</span>
+    <div class="input-group">
+      <label for="name">이름 (참여자 이름)</label>
+      <input type="text" id="name" placeholder="예: 홍길동" />
+      <span class="example">설문지에 입력한 정확한 이름을 입력해주세요.</span>
+    </div>
+
+    <div class="input-group">
+      <label for="phone">연락처 (휴대전화)</label>
+      <input type="text" id="phone" placeholder="예: 01012345678 또는 010-1234-5678" />
+      <span class="example">하이픈(-) 없이 또는 포함하여 입력 가능합니다.</span>
+    </div>
+
+    <button onclick="checkSubmission()">신청 확인</button>
+
+    <div id="result" class="result"></div>
+  </div>
+
+    <div class="quick-menu" id="quickMenu">
+        <a href="https://kugak-am.sen.hs.kr/175213/subMenu.do" target="_blank">학교 홈페이지</a>
+        <a href="https://sites.google.com/view/jeontongyego" target="_blank">전통예고 소개</a>
     </div>
 
-    <div class="input-group">
-      <label for="phone">연락처 (휴대전화)</label>
-      <input type="text" id="phone" placeholder="예: 01012345678 또는 010-1234-5678" />
-      <span class="example">하이픈(-) 없이 또는 포함하여 입력 가능합니다.</span>
-    </div>
-
-    <button onclick="checkSubmission()">신청 확인</button>
-
-    <div id="result" class="result"></div>
-  </div>
-
-<script> 
+<script> 
 // JavaScript <script> 태그 안에 checkSubmission 함수 내부
 async function checkSubmission() {
-  const name = document.getElementById("name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const resultDiv = document.getElementById("result");
-  const checkButton = document.querySelector('button');
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const resultDiv = document.getElementById("result");
+  const checkButton = document.querySelector('button');
 
-  resultDiv.style.display = "none";
-  resultDiv.className = "result";
-  resultDiv.innerText = "";
-  checkButton.disabled = false;
+  resultDiv.style.display = "none";
+  resultDiv.className = "result";
+  resultDiv.innerText = "";
+  checkButton.disabled = false;
 
-  if (!name || !phone) {
-    resultDiv.style.display = "block";
-    resultDiv.className = "result error";
-    resultDiv.innerText = "이름과 연락처를 모두 입력해주세요.";
-    return;
-  }
+  if (!name || !phone) {
+    resultDiv.style.display = "block";
+    resultDiv.className = "result error";
+    resultDiv.innerText = "이름과 연락처를 모두 입력해주세요.";
+    return;
+  }
 
-  resultDiv.style.display = "block";
-  resultDiv.className = "result loading";
-  resultDiv.innerText = "결과를 불러오는 중입니다. 잠시 기다려 주세요...";
-  checkButton.disabled = true;
+  resultDiv.style.display = "block";
+  resultDiv.className = "result loading";
+  resultDiv.innerText = "결과를 불러오는 중입니다. 잠시 기다려 주세요...";
+  checkButton.disabled = true;
 
-  try {
-    const appsScriptUrl = `https://script.google.com/macros/s/AKfycbxr6c_goMpbMqNOZDzR4nslXjDf3GzbC5k33Y61KTnI_dm7gjnU6aXbg5UXo6Ds05CU/exec`;
-    const response = await fetch(`${appsScriptUrl}?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`);
-    const data = await response.json();
+  try {
+    const appsScriptUrl = `https://script.google.com/macros/s/AKfycbxr6c_goMpbMqNOZDzR4nslXjDf3GzbC5k33Y61KTnI_dm7gjnU6aXbg5UXo6Ds05CU/exec`;
+    const response = await fetch(`${appsScriptUrl}?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`);
+    const data = await response.json();
 
-    checkButton.disabled = false;
+    checkButton.disabled = false;
 
-    if (data.error) {
-      resultDiv.className = "result error";
-      resultDiv.innerText = data.error;
-    } else {
-      resultDiv.className = "result";
-      let rankMessage = '';
-      let statusMessage = ''; // 💡 추가: 상태 메시지를 위한 변수
+    if (data.error) {
+      resultDiv.className = "result error";
+      resultDiv.innerText = data.error;
+    } else {
+      resultDiv.className = "result";
+      let rankMessage = '';
+      let statusMessage = ''; // 💡 추가: 상태 메시지를 위한 변수
 
-      if (data.rank) {
-        rankMessage = `\n\n📢 ${data.major} 신청자 중 ${data.rank}번째입니다.`;
+      if (data.rank) {
+        rankMessage = `\n\n📢 ${data.major} 신청자 중 ${data.rank}번째입니다.`;
 
-        // 💡 추가: 순번에 따른 상태 메시지 로직
-        const rank = data.rank;
-        const major = data.major;
+        // 💡 추가: 순번에 따른 상태 메시지 로직
+        const rank = data.rank;
+        const major = data.major;
 
-        if (major === '국악') {
-          if (rank >= 1 && rank <= 150) {
-            statusMessage = "현장 참석자입니다. 향사 아트홀 입장이 가능합니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.";
-          } else if (rank >= 151 && rank <= 250) {
-            statusMessage = "현장 대기자입니다. 교실에서 실시간 송출 영상을 보실 수 있습니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.";
-          } else {
-            statusMessage = "예비 대상자입니다. 취소자가 발생할 시 현장 참석이 가능합니다. 취소자가 발생할 때마다 순번에 따라 개별 연락을 드립니다.";
-          }
-        } else if (major === '무용' || major === '음악연극') {
-          if (rank >= 1 && rank <= 40) {
-            statusMessage = "현장 참석자입니다. 향사 아트홀 입장이 가능합니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.";
-          } else if (rank >= 41 && rank <= 60) {
-            statusMessage = "현장 대기자입니다. 교실에서 실시간 송출 영상을 보실 수 있습니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.";
-          } else {
-            statusMessage = "예비 대상자입니다. 취소자가 발생할 시 현장 참석이 가능합니다. 취소자가 발생하면 순번에 따라 개별 연락을 드립니다.";
-          }
-        }
-      }
+        if (major === '국악') {
+          if (rank >= 1 && rank <= 150) {
+            statusMessage = "현장 참석자입니다. 향사 아트홀 입장이 가능합니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.";
+          } else if (rank >= 151 && rank <= 250) {
+            statusMessage = "현장 대기자입니다. 교실에서 실시간 송출 영상을 보실 수 있습니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.";
+          } else {
+            statusMessage = "예비 대상자입니다. 취소자가 발생할 시 현장 참석이 가능합니다. 취소자가 발생할 때마다 순번에 따라 개별 연락을 드립니다.";
+          }
+        } else if (major === '무용' || major === '음악연극') {
+          if (rank >= 1 && rank <= 40) {
+            statusMessage = "현장 참석자입니다. 향사 아트홀 입장이 가능합니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.";
+          } else if (rank >= 41 && rank <= 60) {
+            statusMessage = "현장 대기자입니다. 교실에서 실시간 송출 영상을 보실 수 있습니다. 방문이 불가하실 경우 02-6488-3507 로 연락주세요. 사전 연락 없이 미방문하실 경우, 향후 학교 행사참여가 제한될 수 있습니다.";
+          } else {
+            statusMessage = "예비 대상자입니다. 취소자가 발생할 시 현장 참석이 가능합니다. 취소자가 발생하면 순번에 따라 개별 연락을 드립니다.";
+          }
+        }
+      }
 
-      let attendeesInfo = '';
-      if (data.attendees !== undefined && data.attendees !== null && data.attendees !== '') {
-          attendeesInfo = `참석 인원: ${data.attendees}\n`;
-      }
-      
-      let otherInfoLine = '';
-      if (data.otherInfo !== undefined && data.otherInfo !== null && data.otherInfo !== '') {
-          otherInfoLine = `그 외 참가자 정보: ${data.otherInfo}\n`;
-      }
+      let attendeesInfo = '';
+      if (data.attendees !== undefined && data.attendees !== null && data.attendees !== '') {
+          attendeesInfo = `참석 인원: ${data.attendees}\n`;
+      }
+      
+      let otherInfoLine = '';
+      if (data.otherInfo !== undefined && data.otherInfo !== null && data.otherInfo !== '') {
+          otherInfoLine = `그 외 참가자 정보: ${data.otherInfo}\n`;
+      }
 
-      resultDiv.innerText =
-        `✅ 신청 내역 확인\n\n` +
-        `이름: ${data.name}\n` +
-        `전공 선택: ${data.major}\n` +
-        attendeesInfo +
-        otherInfoLine +
-        `신청 시간: ${data.timestamp}` +
-        rankMessage;
-      
-      // 💡 추가: 순번 메시지 뒤에 상태 메시지 추가
-      if (statusMessage) {
-        resultDiv.innerText += `\n\n${statusMessage}`;
-      }
-    }
-  } catch (err) {
-    console.error("Fetch error:", err);
-    checkButton.disabled = false;
-    resultDiv.className = "result error";
-    resultDiv.innerText = "요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
-  }
+      resultDiv.innerText =
+        `✅ 신청 내역 확인\n\n` +
+        `이름: ${data.name}\n` +
+        `전공 선택: ${data.major}\n` +
+        attendeesInfo +
+        otherInfoLine +
+        `신청 시간: ${data.timestamp}` +
+        rankMessage;
+      
+      // 💡 추가: 순번 메시지 뒤에 상태 메시지 추가
+      if (statusMessage) {
+        resultDiv.innerText += `\n\n${statusMessage}`;
+      }
+    }
+  } catch (err) {
+    console.error("Fetch error:", err);
+    checkButton.disabled = false;
+    resultDiv.className = "result error";
+    resultDiv.innerText = "요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+  }
 }
-  </script>
+
+// 퀵 메뉴 스크롤 이벤트 리스너 추가
+window.addEventListener('scroll', function() {
+    const quickMenu = document.getElementById('quickMenu');
+    const scrollY = window.scrollY || window.pageYOffset;
+
+    // 퀵 메뉴의 초기 top 위치 (50%는 뷰포트 높이의 50%를 의미)
+    // 스크롤 시 이 값을 기준으로 움직이도록 조정
+    // 여기서는 간단하게 스크롤 양에 따라 top 값을 조절합니다.
+    // 필요에 따라 더 복잡한 계산을 추가할 수 있습니다.
+    quickMenu.style.top = `calc(50% + ${scrollY}px)`; 
+});
+  </script>
 </body>
 </html>

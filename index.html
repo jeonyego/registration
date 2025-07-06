@@ -121,7 +121,6 @@
       }
     }
 
-    /* 🔽 추가된 퀵메뉴 스타일 */
 .quick-menu {
   position: fixed;
   top: 50%;
@@ -143,11 +142,11 @@
   font-weight: 500;
   padding: 6px 8px;
   border-radius: 6px;
-  transition: background-color 0.3s ease; /* 🔹 부드러운 전환 추가 */
+  transition: background-color 0.3s ease; 
 }
 
 .quick-menu a:hover {
-  background-color: #1a5cd8; /* 🔹 마우스 올렸을 때 색상 변화 */
+  background-color: #1a5cd8;
 }
   </style>
 </head>
@@ -172,7 +171,6 @@
     <div id="result" class="result"></div>
   </div>
 
-  <!-- 🔽 퀵메뉴 HTML -->
   <div class="quick-menu">
     <a href="https://kugak-am.sen.hs.kr/175213/subMenu.do" target="_blank">학교 홈페이지</a>
     <a href="https://sites.google.com/view/jeontongyego" target="_blank">소개 사이트</a>
@@ -180,7 +178,6 @@
   </div>
 
 <script> 
-// 기존 JavaScript 그대로 유지
 async function checkSubmission() {
   const name = document.getElementById("name").value.trim();
   const phone = document.getElementById("phone").value.trim();
